@@ -1,6 +1,7 @@
 {
   "variables": {
       "debian_version": "10.4.0",
+      "vm_name": "steam-machine",
       "username": "packer",
       "password": "packer",
       "domain": "packer.local",
@@ -44,7 +45,7 @@
       "shutdown_command": "echo '{{user `password`}}'|sudo -S /sbin/shutdown -hP now",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "steam-machine",
+      "vm_name": "{{user `vm_name`}}",
       "keep_registered": true,
       "skip_export": true,
       "vboxmanage": [
@@ -60,6 +61,6 @@
   }],
   "post-processors": [{
     "type": "shell-local",
-    "inline": ["/usr/bin/VBoxManage modifyvm {{.Name}} --nic1 bridged --nictype1 82545EM --bridgeadapter1 {{user `nic`}}"]}
-  ]
+    "inline": ["VBoxManage modifyvm {{user `vm_name`}} --nic1 bridged --nictype1 82545EM --bridgeadapter1 {{user `nic`}}"]
+  }]
 }
