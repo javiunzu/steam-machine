@@ -2,7 +2,9 @@
   "variables": {
       "debian_version": "10.4.0",
       "username": "packer",
-      "password": "packer"
+      "password": "packer",
+      "domain": "packer.local",
+      "nic": "enp0s31f6"
   },
   "builders": [
     {
@@ -17,7 +19,7 @@
         "kbd-chooser/method=us <wait>",
         "keyboard-configuration/xkb-keymap=es <wait>",
         "netcfg/get_hostname={{ .Name }} <wait>",
-        "netcfg/get_domain=vagrantup.com <wait>",
+        "netcfg/get_domain={{user `domain`}} <wait>",
         "fb=false <wait>",
         "debconf/frontend=noninteractive <wait>",
         "console-setup/ask_detect=false <wait>",
@@ -44,9 +46,10 @@
       "virtualbox_version_file": ".vbox_version",
       "vm_name": "steam-machine",
       "keep_registered": true,
+      "skip_export": true,
       "vboxmanage": [
-        [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
-        [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
+        ["modifyvm", "{{.Name}}", "--memory", "4096" ],
+        ["modifyvm", "{{.Name}}", "--cpus", "4" ]
       ]
     }
   ],
@@ -54,5 +57,9 @@
     "type": "shell",
     "execute_command": "echo '{{user `password`}}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
     "scripts": ["install.sh"]
-  }]
+  }],
+  "post-processors": [{
+    "type": "shell-local",
+    "inline": ["/usr/bin/VBoxManage modifyvm {{.Name}} --nic1 bridged --nictype1 82545EM --bridgeadapter1 {{user `nic`}}"]}
+  ]
 }
