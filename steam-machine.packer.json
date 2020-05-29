@@ -50,7 +50,9 @@
       "skip_export": true,
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--memory", "4096" ],
-        ["modifyvm", "{{.Name}}", "--cpus", "4" ]
+        ["modifyvm", "{{.Name}}", "--cpus", "4" ],
+        ["modifyvm", "{{.Name}}", "--vram", "128"],
+        ["modifyvm", "{{.Name}}", "--audio", "pulse"]
       ]
     }
   ],
