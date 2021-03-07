@@ -13,7 +13,7 @@
 # https://www.packer.io/docs/from-1.5/variables#type-constraints for more info.
 variable "debian_version" {
   type    = string
-  default = "10.4.0"
+  default = "10.8.0"
 }
 
 variable "domain" {
@@ -58,9 +58,8 @@ source "virtualbox-iso" "debian" {
   guest_os_type           = "Debian_64"
   headless                = true
   http_directory          = "http"
-  iso_checksum_type       = "sha512"
-  iso_checksum_url        = "http://cdimage.debian.org/cdimage/release/{{user `debian_version`}}/amd64/iso-cd/SHA512SUMS"
-  iso_url                 = "http://cdimage.debian.org/cdimage/release/{{user `debian_version`}}/amd64/iso-cd/debian-${var.debian_version}-amd64-netinst.iso"
+  iso_checksum            = "file:http://cdimage.debian.org/cdimage/release/${var.debian_version}/amd64/iso-cd/SHA512SUMS"
+  iso_url                 = "http://cdimage.debian.org/cdimage/release/${var.debian_version}/amd64/iso-cd/debian-${var.debian_version}-amd64-netinst.iso"
   keep_registered         = true
   shutdown_command        = "echo '${var.password}'|sudo -S /sbin/shutdown -hP now"
   skip_export             = true
